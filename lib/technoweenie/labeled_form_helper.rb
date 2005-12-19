@@ -4,6 +4,7 @@ module Technoweenie #:nodoc:
     #   <% form_for :person, @person, :url => { :action => "update" } do |f| %>
     #     First name: <%= f.text_field :first_name %>
     #   <% end %>
+    # 
     #     <form action="update">
     #       <p><label for="person_first_name">First Name</label><br /><input type="text" id="person_first_name" name="person[first_name]" /></p>
     def labeled_form_for(object_name, object, options = {}, &proc)
@@ -27,6 +28,7 @@ module Technoweenie #:nodoc:
     # Example (call, result).
     #   label_for('post', 'category')
     #     <label for="post_category">Category</label>
+    # 
     #   label_for('post', 'category', 'text' => 'This Category')
     #     <label for="post_category">This Category</label>
     def label_for(object_name, method, options = {})
@@ -51,13 +53,13 @@ module Technoweenie #:nodoc:
     end
   end
 
-  module FormBuilderMethods
+  module FormBuilderMethods #:nodoc:
     def label_for(method, options = {})
       @template.label_for(@object_name, method, options.merge(:object => @object))
     end
   end
 
-  class LabeledFormBuilder < ActionView::Helpers::FormBuilder
+  class LabeledFormBuilder < ActionView::Helpers::FormBuilder #:nodoc:
     (ActionView::Helpers::FormHelper.instance_methods - %w(label_for check_box radio_button form_for fields_for)).each do |selector|
       src = <<-end_src
         def #{selector}(method, options = {})
