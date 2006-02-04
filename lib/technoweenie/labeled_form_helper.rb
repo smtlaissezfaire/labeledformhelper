@@ -13,7 +13,7 @@ module Technoweenie #:nodoc:
 
     # Creates a scope around a specific model object like form_for, but doesn't create the form tags themselves.  However, form 
     # tags are labeled and rendered inside a <p>.
-    def labeled_fields_for(object_name, object, builder = LabeledFormBuilder, &proc)
+    def labeled_fields_for(object_name, object, options = {}, &proc)
       fields_for(object_name, object, {:builder => LabeledFormBuilder}, &proc)
     end
 
