@@ -21,6 +21,7 @@ module Technoweenie #:nodoc:
     def labeled_form_remote_for(object_name, object, options = {}, &proc)
       form_remote_for(object_name, object, options.merge(:builder => LabeledFormBuilder), &proc)
     end
+    alias_method :labeled_remote_form_for, :labeled_form_remote_for
 
     # Returns a label tag that points to a specified attribute (identified by +method+) on an object assigned to a template
     # (identified by +object+).  Additional options on the input tag can be passed as a hash with +options+.  An alternate
