@@ -61,7 +61,7 @@ module Technoweenie #:nodoc:
   end
 
   class LabeledFormBuilder < ActionView::Helpers::FormBuilder #:nodoc:
-    (ActionView::Helpers::FormHelper.instance_methods - %w(label_for check_box radio_button form_for fields_for)).each do |selector|
+    (ActionView::Helpers::FormHelper.instance_methods - %w(label_for hidden_field check_box radio_button form_for fields_for)).each do |selector|
       src = <<-end_src
         def #{selector}(method, options = {})
           @template.content_tag('p', label_for(method) + "<br />" + super)
@@ -73,7 +73,11 @@ module Technoweenie #:nodoc:
     def check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
       @template.content_tag('p', label_for(method) + "<br />" + super)
     end
-  
+
+    def hidden_field(method, options={})
+      super
+    end
+
     def radio_button(method, tag_value, options = {})
       @template.content_tag('p', label_for(method) + "<br />" + super)
     end
