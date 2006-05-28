@@ -1,27 +1,15 @@
 module Technoweenie #:nodoc:
   module LabeledFormHelper
-    # Creates a form and a scope around a model object like #form_for.  However, form tags are labeled and rendered inside a <p>.
-    #   <% form_for :person, @person, :url => { :action => "update" } do |f| %>
-    #     First name: <%= f.text_field :first_name %>
-    #   <% end %>
-    # 
-    #     <form action="update">
-    #       <p><label for="person_first_name">First Name</label><br /><input type="text" id="person_first_name" name="person[first_name]" /></p>
-    def labeled_form_for(object_name, object, options = {}, &proc)
-      form_for(object_name, object, options.merge(:builder => LabeledFormBuilder), &proc)
+    [:form_for, :fields_for, :form_remote_for, :remote_form_for].each do |meth|
+      src = <<-end_src
+        def labeled_#{meth}(object_name, *args, &proc)
+          options = args.last.is_a?(Hash) ? args.pop : {}
+          options.update(:builder => LabeledFormBuilder)
+          #{meth}(object_name, *(args << options), &proc)
+        end
+      end_src
+      module_eval src, __FILE__, __LINE__
     end
-
-    # Creates a scope around a specific model object like form_for, but doesn't create the form tags themselves.  However, form 
-    # tags are labeled and rendered inside a <p>.
-    def labeled_fields_for(object_name, object, options = {}, &proc)
-      fields_for(object_name, object, {:builder => LabeledFormBuilder}, &proc)
-    end
-
-    # Works like form_remote_tag, but uses labeled_form_for semantics.
-    def labeled_form_remote_for(object_name, object, options = {}, &proc)
-      form_remote_for(object_name, object, options.merge(:builder => LabeledFormBuilder), &proc)
-    end
-    alias_method :labeled_remote_form_for, :labeled_form_remote_for
 
     # Returns a label tag that points to a specified attribute (identified by +method+) on an object assigned to a template
     # (identified by +object+).  Additional options on the input tag can be passed as a hash with +options+.  An alternate

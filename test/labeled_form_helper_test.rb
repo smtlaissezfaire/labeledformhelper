@@ -78,6 +78,29 @@ class LabeledFormHelperTest < Test::Unit::TestCase
     assert_dom_equal expected, _erbout
   end
 
+  def test_labeled_form_for_with_single_argument
+    _erbout = ''
+
+    labeled_form_for(:post) do |f|
+      _erbout.concat f.text_field(:title)
+      _erbout.concat f.text_area(:body)
+      _erbout.concat f.check_box(:secret)
+    end
+
+    expected = 
+      "<form action='http://www.example.com' method='post'>" +
+      "<p><label for='post_title'>Title</label><br />" +
+      "<input name='post[title]' size='30' type='text' id='post_title' value='Hello World' /></p>" +
+      "<p><label for='post_body'>Body</label><br />" +
+      "<textarea name='post[body]' id='post_body' rows='20' cols='40'>Back to the hill and over it again!</textarea></p>" +
+      "<p><label for='post_secret'>Secret</label><br />" +
+      "<input name='post[secret]' checked='checked' type='checkbox' id='post_secret' value='1' />" +
+      "<input name='post[secret]' type='hidden' value='0' /></p>" +
+      "</form>"
+
+    assert_dom_equal expected, _erbout
+  end
+
   def test_labeled_form_for_and_fields_for
     _erbout = ''
 
@@ -108,6 +131,27 @@ class LabeledFormHelperTest < Test::Unit::TestCase
     _erbout = ''
 
     labeled_fields_for(:post, @post) do |f|
+      _erbout.concat f.text_field(:title)
+      _erbout.concat f.text_area(:body)
+      _erbout.concat f.check_box(:secret)
+    end
+
+    expected = 
+      "<p><label for='post_title'>Title</label><br />" +
+      "<input name='post[title]' size='30' type='text' id='post_title' value='Hello World' /></p>" +
+      "<p><label for='post_body'>Body</label><br />" +
+      "<textarea name='post[body]' id='post_body' rows='20' cols='40'>Back to the hill and over it again!</textarea></p>" +
+      "<p><label for='post_secret'>Secret</label><br />" +
+      "<input name='post[secret]' checked='checked' type='checkbox' id='post_secret' value='1' />" +
+      "<input name='post[secret]' type='hidden' value='0' /></p>"
+
+    assert_dom_equal expected, _erbout
+  end
+
+  def test_labeled_fields_for_with_single_attribute
+    _erbout = ''
+
+    labeled_fields_for(:post) do |f|
       _erbout.concat f.text_field(:title)
       _erbout.concat f.text_area(:body)
       _erbout.concat f.check_box(:secret)
