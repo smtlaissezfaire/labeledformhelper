@@ -49,7 +49,7 @@ module Technoweenie #:nodoc:
   end
 
   class LabeledFormBuilder < ActionView::Helpers::FormBuilder #:nodoc:
-    (ActionView::Helpers::FormHelper.instance_methods - %w(label_for hidden_field date_select select check_box radio_button form_for fields_for)).each do |selector|
+    (ActionView::Helpers::FormHelper.instance_methods - %w(label_for hidden_field check_box radio_button form_for fields_for)).each do |selector|
       src = <<-end_src
         def #{selector}(method, options = {})
           @template.content_tag('p', label_for(method) + "<br />" + super)
@@ -58,19 +58,11 @@ module Technoweenie #:nodoc:
       class_eval src, __FILE__, __LINE__
     end
 
-    def check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
-      @template.content_tag('p', label_for(method) + "<br />" + super)
-    end
-
     def hidden_field(method, options={})
       super
     end
     
-    def date_select(method, options={})
-      @template.content_tag('p', label_for(method) + "<br />" + super)
-    end
-    
-    def select(method, options={})
+    def check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
       @template.content_tag('p', label_for(method) + "<br />" + super)
     end
     
@@ -78,8 +70,8 @@ module Technoweenie #:nodoc:
       @template.content_tag('p', label_for(method) + "<br />" + super)
     end
 
-    def fields_for(object_name, object, builder = self.class, &proc)
-      @template.labeled_fields_for(object_name, object, builder, &proc)
+    def fields_for(object_name, *args, &proc)
+      @template.labeled_fields_for(object_name, *args, &proc)
     end
   end
 end
